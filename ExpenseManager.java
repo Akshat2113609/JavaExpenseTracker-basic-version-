@@ -1,5 +1,40 @@
 import java.util.*;
+import java.io.* ;
+
 class ExpenseManager {
+
+    public static void saveExpenses(ArrayList<Expense>expenses){
+         try (BufferedWriter writer =
+             new BufferedWriter(new FileWriter("expenses.txt"))){
+            for(Expense e: expenses){
+                writer.write(e.category + "," + e.amount);
+                writer.newLine();
+            }
+        }
+        catch(IOException e){
+            System.out.println("Error saving expenses.");
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<Expense> loadExpenses(){
+        ArrayList<Expense> expenses = new ArrayList<>();
+        try (BufferedReader reader =
+             new BufferedReader(new FileReader("expenses.txt"))){
+            String line;
+            while((line = reader.readLine())!=null){
+                String[] parts = line.split(",");
+                String category = parts[0];
+                double amount = Double.parseDouble(parts[1]);
+                expenses.add(new Expense(category,amount));
+            }
+        }
+        catch (IOException e) {
+        System.out.println("No existing expense file found.");
+        }
+        return expenses;
+    }
+
     public static HashMap<String,ArrayList<Double>> createMap(ArrayList<Expense>expenses){
         HashMap<String,ArrayList<Double>> expenseMap = new HashMap<>();
         for(Expense e: expenses){
@@ -37,7 +72,7 @@ class ExpenseManager {
         for(double i: expenseMap.get(cat)){
             amnt+=i;
         }
-    System.out.println("for category: "+ cat + "the amount spent is: "+ amnt); 
+    System.out.println("for category: "+ cat + " the amount spent is: "+ amnt); 
   }
 
 }

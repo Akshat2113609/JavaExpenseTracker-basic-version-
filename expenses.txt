@@ -1,0 +1,4 @@
+Food,1000.0
+Games,1000.0
+Frient,1999.0
+Slab,12.0
